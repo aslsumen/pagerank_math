@@ -122,4 +122,25 @@ nx.draw(
 )
 
 plt.title("PageRank graph (c = 0.85)")
+
+# -------------------------------------------------
+# Internal Consistency Check 
+# Verification of the relation: p = pG
+# -------------------------------------------------
+# 1. Reconstruct the Google Matrix G
+G_matrix = c * P + (1 - c) * v
+
+# 2. Calculate pG (the product of our final vector and the Google matrix)
+p_G = p @ G_matrix
+
+# 3. Calculate the L1 residual error between p and pG
+residual_error = np.linalg.norm(p - p_G, ord=1)
+
+print("\n--- Numerical Verification ---")
+print(f"Residual error ||p - pG||_1: {residual_error:.2e}")
+
+if residual_error < 1e-12:
+    print("✅ Verification Successful: p is a stationary distribution (p = pG).")
+else:
+    print("⚠️ Verification Warning: Significant difference between p and pG.")
 plt.show()
